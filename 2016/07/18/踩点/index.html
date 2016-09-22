@@ -1,0 +1,594 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="安全," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="踩点对于白帽子来说，在开始真正渗透之前，必须完成渗透前的信息收集，我们称之为踩点，踩点有很多手段，我们介绍两种。网络共享主机（旁注）旁注其实就是从旁注入的意思，是渗透入侵常用的一种手段。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="踩点和查点">
+<meta property="og:url" content="http://yoursite.com/2016/07/18/踩点/index.html">
+<meta property="og:site_name" content="寒 枫">
+<meta property="og:description" content="踩点对于白帽子来说，在开始真正渗透之前，必须完成渗透前的信息收集，我们称之为踩点，踩点有很多手段，我们介绍两种。网络共享主机（旁注）旁注其实就是从旁注入的意思，是渗透入侵常用的一种手段。">
+<meta property="og:updated_time" content="2016-09-22T13:16:51.041Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="踩点和查点">
+<meta name="twitter:description" content="踩点对于白帽子来说，在开始真正渗透之前，必须完成渗透前的信息收集，我们称之为踩点，踩点有很多手段，我们介绍两种。网络共享主机（旁注）旁注其实就是从旁注入的意思，是渗透入侵常用的一种手段。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 踩点和查点 | 寒 枫 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">寒 枫</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">If you want ,you can....</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                踩点和查点
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-18T10:25:33+08:00" content="2016-07-18">
+              2016-07-18
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/18/踩点/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/18/踩点/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="踩点"><a href="#踩点" class="headerlink" title="踩点"></a>踩点</h1><h3 id="对于白帽子来说，在开始真正渗透之前，必须完成渗透前的信息收集，我们称之为踩点，踩点有很多手段，我们介绍两种。"><a href="#对于白帽子来说，在开始真正渗透之前，必须完成渗透前的信息收集，我们称之为踩点，踩点有很多手段，我们介绍两种。" class="headerlink" title="对于白帽子来说，在开始真正渗透之前，必须完成渗透前的信息收集，我们称之为踩点，踩点有很多手段，我们介绍两种。"></a>对于白帽子来说，在开始真正渗透之前，必须完成渗透前的信息收集，我们称之为踩点，踩点有很多手段，我们介绍两种。</h3><h2 id="网络共享主机（旁注）"><a href="#网络共享主机（旁注）" class="headerlink" title="网络共享主机（旁注）"></a>网络共享主机（旁注）</h2><p>旁注其实就是从旁注入的意思，是渗透入侵常用的一种手段。<br><a id="more"></a><br>通常，一台服务器上有很多站点，这些站点之间没有必然的联系，是相互独立的，使用的是不同的域名（甚至端口都不同），但是它们却共存在一台服务器上。</p>
+<p>旁注就是利用同一主机上的不同网站的漏洞得到webshell，从而利用主机上的程序或者服务所暴露的用户的物理路径进行入侵，网络共享主机是更为严谨的学术叫法。</p>
+<p>如果我们要对某一个站点进行直接渗透无法突破时，那么我们可以对同服务器的其他站点进行渗透，只要能打破一个缺口，就能沦陷服务区上的整个站点，甚至是一个集群</p>
+<h2 id="C段注入"><a href="#C段注入" class="headerlink" title="C段注入"></a>C段注入</h2><p>C段注入是一个非常容易理解的渗透方式。首先，什么是C段呢？</p>
+<p>比如在：111.111.111.14 这个IP上面有一个网站 。111.14 这个服务器上面有网站我们可以想想..他是一个非常大的站几乎没什么漏洞！但是在他同C段 111.111.111.1~111.111.111.255 这  1~255 上面也有服务器而且也有网站并且存在漏洞,那么我们就可以来渗透 .<br>1~255任何一个站 ，之后提权来嗅探得到111.14 这台服务器的密码， 甚至3389连接的密码和后台登录的密码 ，如果运气好会得到很多的密码…</p>
+<h3 id="踩点有多种手段，这里只介绍旁注和C段注入两种，踩点其实就是获取目标的信息，越多越好，可以通过whois服务-查找二级域名，CDN后的真是ip，IDC机房ISP信息等踩点！"><a href="#踩点有多种手段，这里只介绍旁注和C段注入两种，踩点其实就是获取目标的信息，越多越好，可以通过whois服务-查找二级域名，CDN后的真是ip，IDC机房ISP信息等踩点！" class="headerlink" title="踩点有多种手段，这里只介绍旁注和Ｃ段注入两种，踩点其实就是获取目标的信息，越多越好，可以通过whois服务,查找二级域名，ＣＤＮ后的真是ｉｐ，IDC机房ISP信息等踩点！"></a>踩点有多种手段，这里只介绍旁注和Ｃ段注入两种，踩点其实就是获取目标的信息，越多越好，可以通过whois服务,查找二级域名，ＣＤＮ后的真是ｉｐ，IDC机房ISP信息等踩点！</h3><h1 id="查点"><a href="#查点" class="headerlink" title="查点"></a>查点</h1><h3 id="黑客已经使用踩点技术成功地识别出了网站域名等目标范围清单，接下来他们通常会针对已知的弱点，对目标的-Web-Server，服务器语言、开源程序名单-框架、敏感文件或功能点等网站技术整体做一个详细更为充分的探查。这个过程称之为-Web-查点。"><a href="#黑客已经使用踩点技术成功地识别出了网站域名等目标范围清单，接下来他们通常会针对已知的弱点，对目标的-Web-Server，服务器语言、开源程序名单-框架、敏感文件或功能点等网站技术整体做一个详细更为充分的探查。这个过程称之为-Web-查点。" class="headerlink" title="黑客已经使用踩点技术成功地识别出了网站域名等目标范围清单，接下来他们通常会针对已知的弱点，对目标的 Web Server，服务器语言、开源程序名单/框架、敏感文件或功能点等网站技术整体做一个详细更为充分的探查。这个过程称之为 Web 查点。"></a>黑客已经使用踩点技术成功地识别出了网站域名等目标范围清单，接下来他们通常会针对已知的弱点，对目标的 Web Server，服务器语言、开源程序名单/框架、敏感文件或功能点等网站技术整体做一个详细更为充分的探查。这个过程称之为 Web 查点。</h3><p>那我们为什么要查点呢？</p>
+<p>黑客已经使用踩点技术获得目标具体所使用的各种技术框架，可以精确获得目标现存的甚至未来所存在的隐患，例如发现目标所用论坛为 discuz 3.0 版本号，根据公开漏洞，可以直接进行攻击，如果发现目标使用版本较为安全，则不做无用功去扫描引起目标安全监控报警。</p>
+<p>其过程类似高明的撬锁专家识别锁的安全级别类型,遇到高安全级别锁放弃另寻它法而不是盲目死磕。<br>常用手段：<br>1.Web 开源程序/框架查点。<br>2.Web 语言调试信息&amp;Web Server 错误信息。其中有 Web 语言调试信息 phpinfo 页面，PHP 探针页面，Web Server IIS 报错。<br>3.Web 语言技术：PHP/ASP.NET/JSP    等。<br>4.操作系统：Windows 或 Linux 等操作系统发行版本号。<br>5.敏感文件等。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/安全/" rel="tag">#安全</a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/18/踩点/"
+           data-title="踩点和查点" data-url="http://yoursite.com/2016/07/18/踩点/">
+      </div>
+    
+  </div>
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="寒 枫" />
+          <p class="site-author-name" itemprop="name">寒 枫</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/2063237223/" target="_blank" title="新浪微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  新浪微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              weibo
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://weibo.com/2063237223/" title="友情链接" target="_blank">友情链接</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#踩点"><span class="nav-number">1.</span> <span class="nav-text">踩点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对于白帽子来说，在开始真正渗透之前，必须完成渗透前的信息收集，我们称之为踩点，踩点有很多手段，我们介绍两种。"><span class="nav-number">1.0.1.</span> <span class="nav-text">对于白帽子来说，在开始真正渗透之前，必须完成渗透前的信息收集，我们称之为踩点，踩点有很多手段，我们介绍两种。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络共享主机（旁注）"><span class="nav-number">1.1.</span> <span class="nav-text">网络共享主机（旁注）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C段注入"><span class="nav-number">1.2.</span> <span class="nav-text">C段注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#踩点有多种手段，这里只介绍旁注和C段注入两种，踩点其实就是获取目标的信息，越多越好，可以通过whois服务-查找二级域名，CDN后的真是ip，IDC机房ISP信息等踩点！"><span class="nav-number">1.2.1.</span> <span class="nav-text">踩点有多种手段，这里只介绍旁注和Ｃ段注入两种，踩点其实就是获取目标的信息，越多越好，可以通过whois服务,查找二级域名，ＣＤＮ后的真是ｉｐ，IDC机房ISP信息等踩点！</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查点"><span class="nav-number">2.</span> <span class="nav-text">查点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#黑客已经使用踩点技术成功地识别出了网站域名等目标范围清单，接下来他们通常会针对已知的弱点，对目标的-Web-Server，服务器语言、开源程序名单-框架、敏感文件或功能点等网站技术整体做一个详细更为充分的探查。这个过程称之为-Web-查点。"><span class="nav-number">2.0.1.</span> <span class="nav-text">黑客已经使用踩点技术成功地识别出了网站域名等目标范围清单，接下来他们通常会针对已知的弱点，对目标的 Web Server，服务器语言、开源程序名单/框架、敏感文件或功能点等网站技术整体做一个详细更为充分的探查。这个过程称之为 Web 查点。</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">寒 枫</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"yyfyyfyyfy"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
