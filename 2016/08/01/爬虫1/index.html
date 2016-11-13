@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Python," />
 
 
 
@@ -84,12 +84,16 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="寒 枫">
-<meta property="og:url" content="http://yoursite.com/tags/安全/index.html">
+<meta name="description" content="最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。首先要把一些模块导入，会用到os模块用来保存路径，re模块来编译正则，requests模块可以做url的请求,也可以从lxml模块导入etree类来获取数据。程序代码如下：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python爬虫爬补天">
+<meta property="og:url" content="http://yoursite.com/2016/08/01/爬虫1/index.html">
 <meta property="og:site_name" content="寒 枫">
+<meta property="og:description" content="最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。首先要把一些模块导入，会用到os模块用来保存路径，re模块来编译正则，requests模块可以做url的请求,也可以从lxml模块导入etree类来获取数据。程序代码如下：">
+<meta property="og:updated_time" content="2016-11-13T07:04:10.881Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="寒 枫">
+<meta name="twitter:title" content="Python爬虫爬补天">
+<meta name="twitter:description" content="最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。首先要把一些模块导入，会用到os模块用来保存路径，re模块来编译正则，requests模块可以做url的请求,也可以从lxml模块导入etree类来获取数据。程序代码如下：">
 
 
 
@@ -107,7 +111,7 @@
   };
 </script>
 
-  <title> 标签: 安全 | 寒 枫 </title>
+  <title> Python爬虫爬补天 | 寒 枫 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -128,7 +132,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -206,46 +210,172 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        安全
-        <small>标签</small>
-      </h2>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Python爬虫爬补天
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-01T20:11:25+08:00" content="2016-08-01">
+              2016-08-01
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/01/爬虫1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/01/爬虫1/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <h2 id="最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。"><a href="#最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。" class="headerlink" title="最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。"></a>最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。</h2><p>首先要把一些模块导入，会用到os模块用来保存路径，re模块来编译正则，requests模块可以做url的请求,也可以从lxml模块导入etree类来获取数据。<br>程序代码如下：<br><a id="more"></a></p>
+<pre><code>#导入模块
+import os,re,urllib,requests
+from lxml import etree
 
-      <h1 class="post-title">
+#保存路径的函数
+def save_path(path,fileName,message):
+    if not os.path.exists(path):
+        os.mkdir(path)
+    newFileName = fileName+&apos;.txt&apos;
+    #拼接存储文件的路径(获取的是存储数据文件的绝对路径)
+    newFile = os.path.join(path,newFileName)
+    #将列表message 写入本地
+    with open(newFile,&apos;a&apos;)as f:
+        for s in message:
+            f.write(&apos;%s\t %s\n&apos; % (s[0],s[1]))
+
+def message_info(page):
+    dom = etree.HTML(page)
+    #在网页中找到厂商名和网址url保存为一个列表
+    title = dom.xpath(&apos;//tr/td/a/text()&apos;)
+    url = dom.xpath(&apos;//tr/td[2]/text()&apos;)
+
+    new_list = []
+    for x in range(len(title)):
+        new_tuple = (title[x],url[x])
+        new_list.append(new_tuple)
+    return new_list
+#开始爬虫函数
+def Spider(url):
+    message = requests.get(url).content.decode(&apos;utf-8&apos;)#解析url，结果保存为utf-8编码
+    List = message_info(message)
+    message_path = u&apos;补天厂商列表&apos;
+    message_fileName = u&apos;补天厂商列表&apos;
+    save_path(message_path,message_fileName,List)#调用保存函数
+
+if __name__ == &apos;__main__&apos;:
+    for p in range(1,5):#循环补天厂商列表的页数
+        start_url=&apos;https://butian.360.cn/company/lists/page/&apos;+ str(p)
+        Spider(start_url)
+</code></pre><p>爬补天的一个爬虫就写好了！！！</p>
+
+      
+    </div>
+
+    <div>
+      
         
-            <a class="post-title-link" href="/2016/07/18/踩点/" itemprop="url">
-              
-                <span itemprop="name">踩点和查点</span>
-              
-            </a>
+      
+    </div>
+
+    <div>
+      
         
-      </h1>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-07-18T10:25:33+08:00"
-              content="2016-07-18" >
-          07-18
-        </time>
-      </div>
+      
+    </div>
 
-    </header>
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag">#Python</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/18/踩点/" rel="next" title="踩点和查点">
+                <i class="fa fa-chevron-left"></i> 踩点和查点
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/03/爬虫2/" rel="prev" title="Python爬虫爬补天（重写)">
+                Python爬虫爬补天（重写) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -253,6 +383,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/01/爬虫1/"
+           data-title="Python爬虫爬补天" data-url="http://yoursite.com/2016/08/01/爬虫1/">
+      </div>
+    
+  </div>
+
         </div>
         
           
@@ -271,8 +409,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -340,6 +487,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。"><span class="nav-number">1.</span> <span class="nav-text">最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -436,6 +594,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 

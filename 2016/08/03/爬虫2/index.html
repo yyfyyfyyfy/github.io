@@ -84,12 +84,16 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="寒 枫">
-<meta property="og:url" content="http://yoursite.com/tags/安全/index.html">
+<meta name="description" content="上次写的爬虫爬取补天的厂商列表，如果厂商列表中只有厂商名而没有url是就会报错，而且for循环对于补天的厂商列表来说有些死板，因为他的厂商时刻在增加，所以把for循环改为while循环。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python爬虫爬补天（重写)">
+<meta property="og:url" content="http://yoursite.com/2016/08/03/爬虫2/index.html">
 <meta property="og:site_name" content="寒 枫">
+<meta property="og:description" content="上次写的爬虫爬取补天的厂商列表，如果厂商列表中只有厂商名而没有url是就会报错，而且for循环对于补天的厂商列表来说有些死板，因为他的厂商时刻在增加，所以把for循环改为while循环。">
+<meta property="og:updated_time" content="2016-11-13T07:14:59.110Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="寒 枫">
+<meta name="twitter:title" content="Python爬虫爬补天（重写)">
+<meta name="twitter:description" content="上次写的爬虫爬取补天的厂商列表，如果厂商列表中只有厂商名而没有url是就会报错，而且for循环对于补天的厂商列表来说有些死板，因为他的厂商时刻在增加，所以把for循环改为while循环。">
 
 
 
@@ -107,7 +111,7 @@
   };
 </script>
 
-  <title> 标签: 安全 | 寒 枫 </title>
+  <title> Python爬虫爬补天（重写) | 寒 枫 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -128,7 +132,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -206,46 +210,178 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        安全
-        <small>标签</small>
-      </h2>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Python爬虫爬补天（重写)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-03T19:26:03+08:00" content="2016-08-03">
+              2016-08-03
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/03/爬虫2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/03/爬虫2/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <p>上次写的爬虫爬取补天的厂商列表，如果厂商列表中只有厂商名而没有url是就会报错，而且for循环对于补天的厂商列表来说有些死板，因为他的厂商时刻在增加，所以把for循环改为while循环。<br><a id="more"></a><br>代码如下：</p>
+<pre><code>import requests
+from lxml import etree
+import os
 
-      <h1 class="post-title">
+def Save_File(messageList):
+    path = &apos;补天厂商列表&apos;
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+    filepath = &apos;厂商列表.txt&apos;
+    new_path = os.path.join(path, filepath)
+    with open(new_path, &apos;a+&apos;, encoding = &apos;utf8&apos;) as f:
+        for x in messageList:
+            f.write(&apos;%s   %s\n&apos;% (x[0][0], x[1][0]))    
+
+def load_message(page_message):
+    dom = etree.HTML(page_message)
+    i = 2
+    LM_messageList = []
+    while True:
+        index = str(i)
+        new_xpath = &apos;//table/tr[&apos; + index + &apos;]/td[1]/a/text()&apos;
+        title = dom.xpath(new_xpath)
+        new_url_xpath = &apos;//table/tr[&apos; + index + &apos;]/td[2]/text()&apos;
+        url = dom.xpath(new_url_xpath)
+        if not url:
+            url = [&apos;URL丢失&apos;]
+
+        if not title:
+            break
+        LM_messageList.append((title, url))
+        i += 1
+    return LM_messageList
+
+def Spider(file_URL, last_message):
+    print(file_URL)
+    S_page_message = requests.get(file_URL).content.decode(&apos;utf8&apos;)
+    S_messageList = load_message(S_page_message)
+    a = S_messageList[0][0] == last_message[0]
+    if not S_messageList[0][0] == last_message:
+        Save_File(S_messageList)
+
+    return S_messageList[0][0], a
+
+if __name__ == &apos;__main__&apos;:
+    new_url = &apos;https://butian.360.cn/company/lists&apos;
+    t = Spider(new_url, (&apos;a&apos;, &apos;b&apos;))
+    i = 2
+    while True:
+        P_new_url = new_url +&apos;/page/&apos; + str(i)
+        t = Spider(P_new_url, t)
+        if  t[1]:
+            break
+        i += 1
+    print(&apos;finish&apos;)
+</code></pre><p>重写后的代码取消了文件夹，只有一个补天列表文件，会自动判断有无url，且无论厂商有多少页都可以爬到，更加全面。</p>
+
+      
+    </div>
+
+    <div>
+      
         
-            <a class="post-title-link" href="/2016/07/18/踩点/" itemprop="url">
-              
-                <span itemprop="name">踩点和查点</span>
-              
-            </a>
+      
+    </div>
+
+    <div>
+      
         
-      </h1>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-07-18T10:25:33+08:00"
-              content="2016-07-18" >
-          07-18
-        </time>
-      </div>
+      
+    </div>
 
-    </header>
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/01/爬虫1/" rel="next" title="Python爬虫爬补天">
+                <i class="fa fa-chevron-left"></i> Python爬虫爬补天
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -253,6 +389,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/03/爬虫2/"
+           data-title="Python爬虫爬补天（重写)" data-url="http://yoursite.com/2016/08/03/爬虫2/">
+      </div>
+    
+  </div>
+
         </div>
         
           
@@ -271,8 +415,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -340,6 +493,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -436,6 +600,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
