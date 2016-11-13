@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Python," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -84,16 +84,18 @@
 
 
 
-<meta name="description" content="最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。首先要把一些模块导入，会用到os模块用来保存路径，re模块来编译正则，requests模块可以做url的请求,也可以从lxml模块导入etree类来获取数据。程序代码如下：">
+<meta name="description" content="CSRF介绍Cross-Site Request Forgery（CSRF），中文一般译作跨站请求伪造。经常入选owasp漏洞列表Top10，在当前web漏洞排行中，与XSS和SQL注入并列前三。与前两者相比，CSRF相对来说受到的关注要小很多，但是危害却非常大。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python爬虫爬补天">
-<meta property="og:url" content="http://yoursite.com/2016/08/01/爬虫1/index.html">
+<meta property="og:title" content="CSRF跨站请求伪造">
+<meta property="og:url" content="http://yoursite.com/2016/08/10/CSRF/index.html">
 <meta property="og:site_name" content="寒 枫">
-<meta property="og:description" content="最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。首先要把一些模块导入，会用到os模块用来保存路径，re模块来编译正则，requests模块可以做url的请求,也可以从lxml模块导入etree类来获取数据。程序代码如下：">
-<meta property="og:updated_time" content="2016-11-13T07:04:10.881Z">
+<meta property="og:description" content="CSRF介绍Cross-Site Request Forgery（CSRF），中文一般译作跨站请求伪造。经常入选owasp漏洞列表Top10，在当前web漏洞排行中，与XSS和SQL注入并列前三。与前两者相比，CSRF相对来说受到的关注要小很多，但是危害却非常大。">
+<meta property="og:image" content="http://i.imgur.com/dehHv1J.png">
+<meta property="og:updated_time" content="2016-11-13T07:57:04.824Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python爬虫爬补天">
-<meta name="twitter:description" content="最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。首先要把一些模块导入，会用到os模块用来保存路径，re模块来编译正则，requests模块可以做url的请求,也可以从lxml模块导入etree类来获取数据。程序代码如下：">
+<meta name="twitter:title" content="CSRF跨站请求伪造">
+<meta name="twitter:description" content="CSRF介绍Cross-Site Request Forgery（CSRF），中文一般译作跨站请求伪造。经常入选owasp漏洞列表Top10，在当前web漏洞排行中，与XSS和SQL注入并列前三。与前两者相比，CSRF相对来说受到的关注要小很多，但是危害却非常大。">
+<meta name="twitter:image" content="http://i.imgur.com/dehHv1J.png">
 
 
 
@@ -111,7 +113,7 @@
   };
 </script>
 
-  <title> Python爬虫爬补天 | 寒 枫 </title>
+  <title> CSRF跨站请求伪造 | 寒 枫 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -231,7 +233,7 @@
             
             
               
-                Python爬虫爬补天
+                CSRF跨站请求伪造
               
             
           </h1>
@@ -243,8 +245,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-01T20:11:25+08:00" content="2016-08-01">
-              2016-08-01
+            <time itemprop="dateCreated" datetime="2016-08-10T21:15:36+08:00" content="2016-08-10">
+              2016-08-10
             </time>
           </span>
 
@@ -254,8 +256,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/08/01/爬虫1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/01/爬虫1/" itemprop="commentsCount"></span>
+                <a href="/2016/08/10/CSRF/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/10/CSRF/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -278,47 +280,26 @@
       
 
       
-        <h2 id="最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。"><a href="#最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。" class="headerlink" title="最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。"></a>最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。</h2><p>首先要把一些模块导入，会用到os模块用来保存路径，re模块来编译正则，requests模块可以做url的请求,也可以从lxml模块导入etree类来获取数据。<br>程序代码如下：<br><a id="more"></a></p>
-<pre><code>#导入模块
-import os,re,urllib,requests
-from lxml import etree
-
-#保存路径的函数
-def save_path(path,fileName,message):
-    if not os.path.exists(path):
-        os.mkdir(path)
-    newFileName = fileName+&apos;.txt&apos;
-    #拼接存储文件的路径(获取的是存储数据文件的绝对路径)
-    newFile = os.path.join(path,newFileName)
-    #将列表message 写入本地
-    with open(newFile,&apos;a&apos;)as f:
-        for s in message:
-            f.write(&apos;%s\t %s\n&apos; % (s[0],s[1]))
-
-def message_info(page):
-    dom = etree.HTML(page)
-    #在网页中找到厂商名和网址url保存为一个列表
-    title = dom.xpath(&apos;//tr/td/a/text()&apos;)
-    url = dom.xpath(&apos;//tr/td[2]/text()&apos;)
-
-    new_list = []
-    for x in range(len(title)):
-        new_tuple = (title[x],url[x])
-        new_list.append(new_tuple)
-    return new_list
-#开始爬虫函数
-def Spider(url):
-    message = requests.get(url).content.decode(&apos;utf-8&apos;)#解析url，结果保存为utf-8编码
-    List = message_info(message)
-    message_path = u&apos;补天厂商列表&apos;
-    message_fileName = u&apos;补天厂商列表&apos;
-    save_path(message_path,message_fileName,List)#调用保存函数
-
-if __name__ == &apos;__main__&apos;:
-    for p in range(1,5):#循环补天厂商列表的页数
-        start_url=&apos;https://butian.360.cn/company/lists/page/&apos;+ str(p)
-        Spider(start_url)
-</code></pre><p>爬补天的一个爬虫就写好了！！！</p>
+        <h3 id="CSRF介绍"><a href="#CSRF介绍" class="headerlink" title="CSRF介绍"></a>CSRF介绍</h3><h4 id="Cross-Site-Request-Forgery（CSRF），中文一般译作跨站请求伪造。经常入选owasp漏洞列表Top10，在当前web漏洞排行中，与XSS和SQL注入并列前三。与前两者相比，CSRF相对来说受到的关注要小很多，但是危害却非常大。"><a href="#Cross-Site-Request-Forgery（CSRF），中文一般译作跨站请求伪造。经常入选owasp漏洞列表Top10，在当前web漏洞排行中，与XSS和SQL注入并列前三。与前两者相比，CSRF相对来说受到的关注要小很多，但是危害却非常大。" class="headerlink" title="Cross-Site Request Forgery（CSRF），中文一般译作跨站请求伪造。经常入选owasp漏洞列表Top10，在当前web漏洞排行中，与XSS和SQL注入并列前三。与前两者相比，CSRF相对来说受到的关注要小很多，但是危害却非常大。"></a>Cross-Site Request Forgery（CSRF），中文一般译作跨站请求伪造。经常入选owasp漏洞列表Top10，在当前web漏洞排行中，与XSS和SQL注入并列前三。与前两者相比，CSRF相对来说受到的关注要小很多，但是危害却非常大。</h4><a id="more"></a>
+<p>CSRF利用的是网站对用户网页浏览器的信任.</p>
+<h4 id="攻击细节"><a href="#攻击细节" class="headerlink" title="攻击细节"></a>攻击细节</h4><p>跨站请求攻击，简单的说，是攻击者通过一些技术手段欺骗用户的浏览器去访问一个自己曾经认证过的网站并执行一些操作（如发邮件，发消息，甚至财产操作如转账和购买商品）。由于浏览器曾经认证过，所以被访问的网站会认为是真正的用户操作而去执行。这利用了web中用户身份验证的一个漏洞：简单的身份验证只能保证请求发自某个用户的浏览器而不能保证请求是用户自愿发出的。</p>
+<h4 id="攻击原理"><a href="#攻击原理" class="headerlink" title="攻击原理"></a>攻击原理</h4><p><img src="http://i.imgur.com/dehHv1J.png" alt=""></p>
+<h4 id="攻击思想"><a href="#攻击思想" class="headerlink" title="攻击思想"></a>攻击思想</h4><p>这种恶意的网址可以有很多种形式，藏身于网页中的许多地方。</p>
+<p>攻击者不需要控制放置恶意网址的网站。例如：他可以将恶意网址藏在论坛博客等任何用户生成内容的网站中。这意味着如果服务端没有合适的防御措施的话，用户即使访问熟悉的可信网站也有受攻击的危险。</p>
+<h4 id="挟持用户"><a href="#挟持用户" class="headerlink" title="挟持用户"></a>挟持用户</h4><p>其实我们不能挟持用户，但是我们可以挟持用户的浏览器发送任意的请求<br>某些html标签是可以发送HTTP GET类型的请求的。例如<code>&lt;img&gt;</code></p>
+<pre><code>&lt;img src=&quot;http://www.baidu.com&quot; /&gt;
+</code></pre><p>浏览器渲染img标签的时候，并不知道img标签中src属性的值，到底是不是一个图片，浏览器做的就是根据src中的链接，发起一个HTTP GET请求，并且携带上当前浏览器在目标网站上的凭证，也就是cookie，获取返回结果以图片的形式渲染<br>根据这个特性，可以挟持用户的浏览器携带用户凭证发送任意的请求</p>
+<h4 id="CSRF利用的前提条件"><a href="#CSRF利用的前提条件" class="headerlink" title="CSRF利用的前提条件"></a>CSRF利用的前提条件</h4><p>从图中可以看到，要完成一次CSRF攻击，受害者必须一次完成两个步骤：<br>    1.登录信任网站A,并在本地生成Cookie。<br>    2.在不退出的情况下，访问危险网站B。</p>
+<p>如果不满足以上两个条件中的一个，就不会受到CSRF的攻击。</p>
+<p>####　CSRF的分类<br>CSRF最初的一个错误观点，认为CSRF只能有GET请求发起，因此一些开发者认为只要把重要的操作改为只允许POST请求就能防CSRF。<br>对于很多网站来说，即使是一些重要的操作使用POST来提交请求，但是服务端在接受请求的时候未严格的区分GET和POST。攻击者依然可以用GET来请求表单的提交地址。</p>
+<p>比如在PHP中，如果使用的是$_REQUEST,而$_REQUEST既可以接受GET请求也可以接受POST请求。</p>
+<p>如果服务端已经区分了GET和POST,只用$_POST来接收请求数据。最简单的方法就是在攻击页面构造好一个form表单，然后用javascript自动提交这个表单。</p>
+<h4 id="漏洞防御"><a href="#漏洞防御" class="headerlink" title="漏洞防御"></a>漏洞防御</h4><p>从漏洞原理来看可以用以下方法：</p>
+<ol>
+<li>关键操作增加验证码</li>
+<li>验证referer </li>
+<li>使用Token</li>
+</ol>
 
       
     </div>
@@ -338,28 +319,18 @@ if __name__ == &apos;__main__&apos;:
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Python/" rel="tag">#Python</a>
-          
-        </div>
-      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/18/踩点/" rel="next" title="踩点和查点">
-                <i class="fa fa-chevron-left"></i> 踩点和查点
+              <a href="/2016/08/03/爬虫2/" rel="next" title="Python爬虫爬补天（重写)">
+                <i class="fa fa-chevron-left"></i> Python爬虫爬补天（重写)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/08/03/爬虫2/" rel="prev" title="Python爬虫爬补天（重写)">
-                Python爬虫爬补天（重写) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -385,8 +356,8 @@ if __name__ == &apos;__main__&apos;:
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/08/01/爬虫1/"
-           data-title="Python爬虫爬补天" data-url="http://yoursite.com/2016/08/01/爬虫1/">
+      <div class="ds-thread" data-thread-key="2016/08/10/CSRF/"
+           data-title="CSRF跨站请求伪造" data-url="http://yoursite.com/2016/08/10/CSRF/">
       </div>
     
   </div>
@@ -494,7 +465,7 @@ if __name__ == &apos;__main__&apos;:
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。"><span class="nav-number">1.</span> <span class="nav-text">最近在学习Python，想着用Python写一个爬虫把补天的厂商列表爬出来。</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CSRF介绍"><span class="nav-number">1.</span> <span class="nav-text">CSRF介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Cross-Site-Request-Forgery（CSRF），中文一般译作跨站请求伪造。经常入选owasp漏洞列表Top10，在当前web漏洞排行中，与XSS和SQL注入并列前三。与前两者相比，CSRF相对来说受到的关注要小很多，但是危害却非常大。"><span class="nav-number">1.1.</span> <span class="nav-text">Cross-Site Request Forgery（CSRF），中文一般译作跨站请求伪造。经常入选owasp漏洞列表Top10，在当前web漏洞排行中，与XSS和SQL注入并列前三。与前两者相比，CSRF相对来说受到的关注要小很多，但是危害却非常大。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击细节"><span class="nav-number">1.2.</span> <span class="nav-text">攻击细节</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击原理"><span class="nav-number">1.3.</span> <span class="nav-text">攻击原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击思想"><span class="nav-number">1.4.</span> <span class="nav-text">攻击思想</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#挟持用户"><span class="nav-number">1.5.</span> <span class="nav-text">挟持用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CSRF利用的前提条件"><span class="nav-number">1.6.</span> <span class="nav-text">CSRF利用的前提条件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#漏洞防御"><span class="nav-number">1.7.</span> <span class="nav-text">漏洞防御</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
